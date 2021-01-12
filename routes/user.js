@@ -25,4 +25,17 @@ usersRouter.get('/:id', async (req, res) => {
   }
 });
 
+usersRouter.post('/', async (req, res) => {
+  const {name, email} = req.body;
+  const result = await db.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      [name, email],
+  );
+  if (result.rows[0]) {
+    res.status(200).send(result.rows[0]);
+  } else {
+    res.status(400).send();
+  }
+});
+
 module.exports = usersRouter;
