@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const mountRoutes = require('./routes');
 
 /**
  * The Server class used to wrap around and configure an http.server created
@@ -108,6 +109,7 @@ class Server {
     server.setupBodyParser(bodyParser.json);
     server.setupCors(cors);
     server.setupMorgan(morgan, 'combined');
+    mountRoutes(server._expressApp);
     server.listen(port, `Server is listening on port: ${port}`);
   }
 }
