@@ -56,4 +56,21 @@ usersRouter.put('/:id', async (req, res) => {
   }
 });
 
+usersRouter.delete('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  if (id) {
+    const {rows} = await db.query(
+        'DELETE FROM users WHERE id = $1 RETURNING *',
+        [id],
+    );
+    if (rows[0]) {
+      res.status(200).send(rows[0]);
+    } else {
+      res.status(404).send();
+    }
+  } else {
+    res.status(400).send();
+  }
+});
+
 module.exports = usersRouter;
