@@ -38,4 +38,22 @@ usersRouter.post('/', async (req, res) => {
   }
 });
 
+usersRouter.put('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  const {name, email} = req.body;
+  if (id) {
+    const {rows} = await db.query(
+        'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
+        [name, email, id],
+    );
+    if (rows[0]) {
+      res.status(200).send(rows[0]);
+    } else {
+      res.status(404).send();
+    }
+  } else {
+    res.status(400).send();
+  }
+});
+
 module.exports = usersRouter;
