@@ -30,6 +30,15 @@ In the linked article, you can see that the solution is to mofidy the `pg_hba.co
 
 > `pg_hba.conf` can be found at `/ect/postgresql/13/main`. 
 
+### POST a new user
+In this section, the tutorial contains a mistake. In the `const createUser` function, the query should read 
+
+`INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *`.
+
+Also, the parameter to the send method should instead be `result.rows[0].id`, i.e.
+
+`response.status(201).send(User added with ID: ${result.rows[0].id})`
+
 ### Project structure
 The project structure aims to follow the [guidelines from the node-postgres documentation](https://node-postgres.com/guides/async-express).
 
@@ -43,7 +52,7 @@ Once installed, install the program's dependencies with `npm install` in your te
 You can then start the Express server by typing `node index.js`.
 
 ## Endpoints
-Once you have the server up and running, the following end points will be reachable in `http://localhost:4001/`:
+Once you have the server up and running, the following end points will be reachable on `http://localhost:4001/`:
 
 GET
 * `/users` - returns all users
